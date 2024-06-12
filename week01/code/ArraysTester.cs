@@ -1,3 +1,5 @@
+using System.Xml.XPath;
+
 public static class ArraysTester {
     /// <summary>
     /// Entry point for the tests
@@ -6,25 +8,25 @@ public static class ArraysTester {
         // Sample Test Cases (may not be comprehensive)
         Console.WriteLine("\n=========== PROBLEM 1 TESTS ===========");
         double[] multiples = MultiplesOf(7, 5);
-        Console.WriteLine($"<double>{{{string.Join(',', multiples)}}}"); // <double>{7, 14, 21, 28, 35}
+        Console.WriteLine($"<double>{{{string.Join(", ", multiples)}}}"); // <double>{7, 14, 21, 28, 35}
         multiples = MultiplesOf(1.5, 10);
-        Console.WriteLine($"<double>{{{string.Join(',', multiples)}}}"); // <double>{1.5, 3.0, 4.5, 6.0, 7.5, 9.0, 10.5, 12.0, 13.5, 15.0}
+        Console.WriteLine($"<double>{{{string.Join(", ", multiples)}}}"); // <double>{1.5, 3.0, 4.5, 6.0, 7.5, 9.0, 10.5, 12.0, 13.5, 15.0}
         multiples = MultiplesOf(-2, 10);
-        Console.WriteLine($"<double>{{{string.Join(',', multiples)}}}"); // <double>{-2, -4, -6, -8, -10, -12, -14, -16, -18, -20}
+        Console.WriteLine($"<double>{{{string.Join(", ", multiples)}}}"); // <double>{-2, -4, -6, -8, -10, -12, -14, -16, -18, -20}
 
         Console.WriteLine("\n=========== PROBLEM 2 TESTS ===========");
         List<int> numbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         RotateListRight(numbers, 1);
-        Console.WriteLine($"<List>{{{string.Join(',', numbers)}}}"); // <List>{9, 1, 2, 3, 4, 5, 6, 7, 8}
+        Console.WriteLine($"<List>{{{string.Join(", ", numbers)}}}"); // <List>{9, 1, 2, 3, 4, 5, 6, 7, 8}
         numbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         RotateListRight(numbers, 5);
-        Console.WriteLine($"<List>{{{string.Join(',', numbers)}}}"); // <List>{5, 6, 7, 8, 9, 1, 2, 3, 4}
+        Console.WriteLine($"<List>{{{string.Join(", ", numbers)}}}"); // <List>{5, 6, 7, 8, 9, 1, 2, 3, 4}
         numbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         RotateListRight(numbers, 3);
-        Console.WriteLine($"<List>{{{string.Join(',', numbers)}}}"); // <List>{7, 8, 9, 1, 2, 3, 4, 5, 6}
+        Console.WriteLine($"<List>{{{string.Join(", ", numbers)}}}"); // <List>{7, 8, 9, 1, 2, 3, 4, 5, 6}
         numbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         RotateListRight(numbers, 9);
-        Console.WriteLine($"<List>{{{string.Join(',', numbers)}}}"); // <List>{1, 2, 3, 4, 5, 6, 7, 8, 9}
+        Console.WriteLine($"<List>{{{string.Join(", ", numbers)}}}"); // <List>{1, 2, 3, 4, 5, 6, 7, 8, 9}
     }
     /// <summary>
     /// This function will produce a list of size 'length' starting with 'number' followed by multiples of 'number'.  For 
@@ -39,7 +41,18 @@ public static class ArraysTester {
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
-        return new double[0]; // replace this return statement with your own
+        // Initialize a new array of doubles with the specified length
+        double[] result = new double[length];
+
+        // Loop through each index of the array
+        for (int i = 0; i < length; i++)
+        {
+            // Assign to each element the product of 'number' and the current index + 1
+            result[i] = number * (i + 1);
+        }
+
+        // Return the array
+        return result;
     }
     
     /// <summary>
@@ -57,5 +70,30 @@ public static class ArraysTester {
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
+        // Check if rotation is not needed (amount to rotate is 0, list is empty, or amount equals list size)
+        if (amount == 0 || data.Count == 0 || amount == data.Count)
+        {
+            return; // Exit the method as there's nothing to rotate
+        }
+
+        // Calculate the index at which to split the list for rotation
+        int splitIndex = data.Count - amount;
+
+        // Initialize a new list to hold the rotated elements
+        List<int> rotatedList = new List<int>();
+
+        // Add the elements from the split index to the end of the original list to the beginning of the rotated list
+        rotatedList.AddRange(data.GetRange(splitIndex, amount));
+
+        // Add the elements from the start of the original list up to the split index to the end of the rotated list
+        rotatedList.AddRange(data.GetRange(0, splitIndex));
+
+        // Copy the rotated elements back into the original list
+        for (int i = 0; i < data.Count; i++)
+        {
+            data[i] = rotatedList[i];
+        }
+
+        return; // return to exit the method
     }
 }
