@@ -15,7 +15,7 @@
         // Console.WriteLine(players);    // This can be un-commented out for debug help
         while (players.Length > 0)
             players.GetNextPerson();
-        // Defect(s) Found: 
+        // Defect(s) Found: Each person is being added and re-added to the front of the queue instead of the end.
 
         Console.WriteLine("---------");
 
@@ -38,7 +38,7 @@
         while (players.Length > 0)
             players.GetNextPerson();
 
-        // Defect(s) Found: 
+        // Defect(s) Found: Each person is being added and re-added to the front of the queue instead of the end.
 
         Console.WriteLine("---------");
 
@@ -56,7 +56,8 @@
             players.GetNextPerson();
             // Console.WriteLine(players);
         }
-        // Defect(s) Found: 
+        // Defect(s) Found: Each person is being added and re-added to the front of the queue instead of the end.
+        //                  Person with forever turns is not being re-added to the queue.
 
         Console.WriteLine("---------");
 
@@ -73,7 +74,8 @@
             players.GetNextPerson();
             // Console.WriteLine(players);
         }
-        // Defect(s) Found: 
+        // Defect(s) Found: Each person is being added and re-added to the front of the queue instead of the end.
+        //                  Person with forever turns is not being re-added to the queue.
 
         Console.WriteLine("---------");
 
@@ -83,6 +85,6 @@
         Console.WriteLine("Test 5");
         players = new TakingTurnsQueue();
         players.GetNextPerson();
-        // Defect(s) Found:
+        // Defect(s) Found: None.
     }
 }

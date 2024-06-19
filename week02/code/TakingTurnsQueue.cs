@@ -34,7 +34,7 @@ public class TakingTurnsQueue {
             Console.WriteLine("No one in the queue.");
         else {
             Person person = _people.Dequeue();
-            if (person.Turns > 1) {
+            if (person.Turns > 1 || person.ToString().Contains("Forever")) {
                 person.Turns -= 1;
                 _people.Enqueue(person);
             }
