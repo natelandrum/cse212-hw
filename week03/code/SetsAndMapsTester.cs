@@ -4,24 +4,24 @@ public static class SetsAndMapsTester {
     public static void Run() {
         // Problem 1: Find Pairs with Sets
         Console.WriteLine("\n=========== Finding Pairs TESTS ===========");
-        DisplayPairs(new[] { "am", "at", "ma", "if", "fi" });
+        DisplayPairs(["am", "at", "ma", "if", "fi"]);
         // ma & am
         // fi & if
         Console.WriteLine("---------");
-        DisplayPairs(new[] { "ab", "bc", "cd", "de", "ba" });
+        DisplayPairs(["ab", "bc", "cd", "de", "ba"]);
         // ba & ab
         Console.WriteLine("---------");
-        DisplayPairs(new[] { "ab", "ba", "ac", "ad", "da", "ca" });
+        DisplayPairs(["ab", "ba", "ac", "ad", "da", "ca"]);
         // ba & ab
         // da & ad
         // ca & ac
         Console.WriteLine("---------");
-        DisplayPairs(new[] { "ab", "ac" }); // No pairs displayed
+        DisplayPairs(["ab", "ac"]); // No pairs displayed
         Console.WriteLine("---------");
-        DisplayPairs(new[] { "ab", "aa", "ba" });
+        DisplayPairs(["ab", "aa", "ba"]);
         // ba & ab
         Console.WriteLine("---------");
-        DisplayPairs(new[] { "23", "84", "49", "13", "32", "46", "91", "99", "94", "31", "57", "14" });
+        DisplayPairs(["23", "84", "49", "13", "32", "46", "91", "99", "94", "31", "57", "14"]);
         // 32 & 23
         // 94 & 49
         // 31 & 13
@@ -111,6 +111,21 @@ public static class SetsAndMapsTester {
         // To display the pair correctly use something like:
         // Console.WriteLine($"{word} & {pair}");
         // Each pair of words should displayed on its own line.
+
+        // Create new set
+        HashSet<string> set = new();
+        
+        foreach (string word in words) {
+            // Reverse the word
+            string reverse = string .Join("", word.Reverse());
+            // Check if the reverse word is in the set and the word is not the same as the reverse
+            if (set.Contains(reverse) && word != reverse) {
+                Console.WriteLine($"{word} & {reverse}");
+            } else {
+                // Add the word to the set
+                set.Add(word);
+            }
+        }
     }
 
     /// <summary>
@@ -128,10 +143,12 @@ public static class SetsAndMapsTester {
     /// # Problem 2 #
     /// #############
     private static Dictionary<string, int> SummarizeDegrees(string filename) {
+        // Create new dictionary
         var degrees = new Dictionary<string, int>();
         foreach (var line in File.ReadLines(filename)) {
             var fields = line.Split(",");
             // Todo Problem 2 - ADD YOUR CODE HERE
+            degrees[fields[3]] = degrees.TryGetValue(fields[3], out var count) ? count + 1 : 1;
         }
 
         return degrees;
@@ -158,7 +175,28 @@ public static class SetsAndMapsTester {
     /// #############
     private static bool IsAnagram(string word1, string word2) {
         // Todo Problem 3 - ADD YOUR CODE HERE
-        return false;
+        // Create a new dictionary
+        var dict = new Dictionary<char, int>();
+        foreach (char c in word1.ToLower()) {
+            if (c != ' ') {
+                // Add the character to the dictionary with a value of 1 or increment the value if it exists
+                dict[c] = dict.TryGetValue(c, out int count) ? ++count : 1;
+            }
+        }
+
+        foreach (char c in word2.ToLower()) {
+            if (c != ' ') {
+                // Check if the character is not in the dictionary or the value is 0
+                if (!dict.TryGetValue(c, out int count) || count == 0) {
+                    return false;
+                }
+                // Decrement the value of the character
+                dict[c]--;
+            }
+        }
+
+        // Return true if all values in the dictionary are 0, otherwise return false
+        return dict.Values.All(value => value == 0);
     }
 
     /// <summary>
@@ -206,6 +244,8 @@ public static class SetsAndMapsTester {
         return map;
     }
 
+
+
     /// <summary>
     /// This function will read JSON (Javascript Object Notation) data from the 
     /// United States Geological Service (USGS) consisting of earthquake data.
@@ -235,5 +275,9 @@ public static class SetsAndMapsTester {
         // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to print out each place a earthquake has happened today and its magitude.
+
+        foreach (var feature in featureCollection.Features) {
+            Console.WriteLine($"{feature.Properties.Place} - Mag {feature.Properties.Mag}");
+        }
     }
 }
