@@ -67,7 +67,7 @@ public static class RecursionTester {
         Console.WriteLine(CountWaysToClimb(20)); // 121415
         // Uncomment out the test below after implementing memoization.  It won't work without it.
         // TODO Problem 3
-        // Console.WriteLine(CountWaysToClimb(100));  // 180396380815100901214157639
+        Console.WriteLine(CountWaysToClimb(100));  // 180396380815100901214157639
 
         // Sample Test Cases (may not be comprehensive) 
         Console.WriteLine("\n=========== PROBLEM 4 TESTS ===========");
@@ -147,7 +147,14 @@ public static class RecursionTester {
     /// </summary>
     public static int SumSquaresRecursive(int n) {
         // TODO Start Problem 1
-        return 0;
+        if (n <= 1)
+        {
+            return n;
+        }
+        else
+        {
+            return n * n + SumSquaresRecursive(n - 1);
+        }
     }
 
     /// <summary>
@@ -171,6 +178,17 @@ public static class RecursionTester {
     /// </summary>
     public static void PermutationsChoose(string letters, int size, string word = "") {
         // TODO Start Problem 2
+        if (size == 0)
+        {
+            Console.WriteLine(word);
+        }
+        else
+        {
+            for (int i = 0; i < letters.Length; i++)
+            {
+                PermutationsChoose(letters.Remove(i, 1), size - 1, word + letters[i]);
+            }
+        }
     }
 
     /// <summary>
@@ -219,6 +237,11 @@ public static class RecursionTester {
     /// until the memoization is implemented.
     /// </summary>
     public static decimal CountWaysToClimb(int s, Dictionary<int, decimal>? remember = null) {
+
+        // Initialize the dictionary if it is not already
+        if (remember == null)
+            remember = new Dictionary<int, decimal>();
+
         // Base Cases
         if (s == 0)
             return 0;
@@ -229,9 +252,18 @@ public static class RecursionTester {
         if (s == 3)
             return 4;
 
+        // Check if we have already solved this problem
+        if (remember.TryGetValue(s, out decimal result))
+            return result;
+
         // Solve using recursion
-        decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
-        return ways;
+        else 
+        {
+            decimal ways = CountWaysToClimb(s - 1, remember) + CountWaysToClimb(s - 2, remember) + CountWaysToClimb(s - 3, remember);
+            // Memoize the result
+            remember[s] = ways;
+            return ways;
+        }
     }
 
     /// <summary>
@@ -249,6 +281,17 @@ public static class RecursionTester {
     /// </summary>
     public static void WildcardBinary(string pattern) {
         // TODO Start Problem 4
+        if (pattern.Contains('*'))
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                WildcardBinary(pattern[..pattern.IndexOf('*')] + i + pattern[(pattern.IndexOf('*') + 1)..]);
+            }
+        }
+        else
+        {
+            Console.WriteLine(pattern);
+        }
     }
 
     /// <summary>
@@ -265,6 +308,32 @@ public static class RecursionTester {
 
         // TODO Start Problem 5
         // ADD CODE HERE
+
+        // If we are at the end of the maze, then print the path(base case)
+        if (maze.IsEnd(x, y))
+        {
+            currPath.Add((x, y));
+            Console.WriteLine(currPath.AsString());
+            currPath.Remove((x, y));
+        }
+
+        // Define directions
+        var directions = new List<(int, int)> { (1, 0), (-1, 0), (0, 1), (0, -1) };
+
+        // Iterate over directions and recursively call SolveMaze
+
+        foreach(var (dx, dy) in directions)
+        {
+            int nextX = x + dx;
+            int nextY = y + dy;
+
+            if (maze.IsValidMove(currPath, nextX, nextY))
+            {
+                currPath.Add((x, y));
+                SolveMaze(maze, nextX, nextY, currPath);
+                currPath.Remove((x, y));
+            }
+        }
 
         // Console.WriteLine(currPath.AsString()); // Use this to print out your path when you find the solution
     }
